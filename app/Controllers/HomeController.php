@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Actions\FindUserAction;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
@@ -11,9 +12,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController
 {
-    public function __construct()
+    /**
+     * @var FindUserAction
+     */
+    private FindUserAction $findUser;
+
+    public function __construct(FindUserAction $findUser)
     {
-        //
+        $this->findUser = $findUser;
     }
 
     /**
@@ -25,6 +31,7 @@ class HomeController
      */
     public function index(ServerRequestInterface $request): ResponseInterface
     {
+//        dd(Application::$app->getContainer()->get('config')->get('app'));
         $debug = Application::$app->getContainer()->get('config')->get('app.debug');
         $env = Application::$app->getContainer()->get('config')->get('app.env');
         $timezone = Application::$app->getContainer()->get('config')->get('app.timezone');
@@ -34,6 +41,7 @@ class HomeController
             'debug' => $debug,
             'env' => $env,
             'timezone' => $timezone,
+            'user' => $this->findUser->byEmail('john'),
         ]);
     }
 

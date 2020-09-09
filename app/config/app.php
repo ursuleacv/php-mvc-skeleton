@@ -27,5 +27,5 @@ return [
     |
     */
 
-    'debug' => (bool) $_ENV['APP_DEBUG'] ?: false,
+    'debug' => filter_var($_ENV['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN),
 ];
