@@ -17,7 +17,6 @@ class Config
 
     public function loadConfig(): Repository
     {
-        $this->loadEnvFile();
         $config = $this->loadConfigurationFiles();
 
         date_default_timezone_set($config->get('app.timezone', 'UTC'));
@@ -71,16 +70,5 @@ class Config
     private function configPath()
     {
         return $this->rootPath . DIRECTORY_SEPARATOR.'app' . DIRECTORY_SEPARATOR . 'config';
-    }
-
-    /**
-     * Load .env file.
-     */
-    private function loadEnvFile(): void
-    {
-        $dotEnv = Dotenv::createImmutable($this->rootPath);
-        $dotEnv->load();
-        $dotEnv->required(['APP_DEBUG'])->isBoolean();
-        $dotEnv->required(['APP_ENV'])->notEmpty();
     }
 }
