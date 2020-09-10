@@ -65,6 +65,7 @@ final class Application
         // TODO: load Whoops only in debug mode
         $providers = [
             new \PhpMvcCore\ServiceProviders\ConfigServiceProvider,
+            new \PhpMvcCore\ServiceProviders\LoggerServiceProvider(),
             new \PhpMvcCore\ServiceProviders\HttpServiceProvider,
             new \PhpMvcCore\ServiceProviders\RouterServiceProvider,
             new \PhpMvcCore\ServiceProviders\WhoopsServiceProvider,

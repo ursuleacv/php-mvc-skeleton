@@ -9,6 +9,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 
 class HomeController
 {
@@ -16,10 +17,15 @@ class HomeController
      * @var FindUserAction
      */
     private FindUserAction $findUser;
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
-    public function __construct(FindUserAction $findUser)
+    public function __construct(FindUserAction $findUser, LoggerInterface $logger)
     {
         $this->findUser = $findUser;
+        $this->logger = $logger;
     }
 
     /**
@@ -31,7 +37,10 @@ class HomeController
      */
     public function index(ServerRequestInterface $request): ResponseInterface
     {
-//        dd(Application::$app->getContainer()->get('config')->get('app'));
+        $user = $this->findUser->byEmail('john@gmail.com');
+
+        $this->logger->info('test message', ['user' => $user]);
+
         $debug = Application::$app->getContainer()->get('config')->get('app.debug');
         $env = Application::$app->getContainer()->get('config')->get('app.env');
         $timezone = Application::$app->getContainer()->get('config')->get('app.timezone');
@@ -41,7 +50,7 @@ class HomeController
             'debug' => $debug,
             'env' => $env,
             'timezone' => $timezone,
-            'user' => $this->findUser->byEmail('john'),
+            'user' => $user,
         ]);
     }
 
