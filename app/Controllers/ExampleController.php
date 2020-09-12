@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Actions\FindUserAction;
-use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
+use PhpMvcCore\View;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -14,20 +14,29 @@ use PSR7Sessions\Storageless\Http\SessionMiddleware;
 
 class ExampleController
 {
-
     /**
      * @var FindUserAction
      */
     private FindUserAction $findUser;
+
     /**
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
 
-    public function __construct(FindUserAction $findUser, LoggerInterface $logger)
-    {
+    /**
+     * @var View
+     */
+    private View $view;
+
+    public function __construct(
+        View $view,
+        LoggerInterface $logger,
+        FindUserAction $findUser
+    ) {
         $this->findUser = $findUser;
         $this->logger = $logger;
+        $this->view = $view;
     }
 
     /**
@@ -42,19 +51,19 @@ class ExampleController
         $user = $this->findUser->byEmail('john@gmail.com');
 
         $this->logger->info('test message', ['user' => $user]);
-
+        // or
         \logger()->info('This is logged from a global function');
 
-        $debug = Application::$app->getContainer()->get('config')->get('app.debug');
-        $env = Application::$app->getContainer()->get('config')->get('app.env');
-        $timezone = Application::$app->getContainer()->get('config')->get('app.timezone');
+        $debug = Application::$app->getContainer()->get('Config')->get('app.debug');
+        $env = Application::$app->getContainer()->get('Config')->get('app.env');
+        $timezone = Application::$app->getContainer()->get('Config')->get('app.timezone');
 
-        $debugFunc = config('app.debug');
+        // or
+        $debug = config('app.debug');
 
 //        return new HtmlResponse('<p>Hello</p>');
         return new JsonResponse([
             'debug' => $debug,
-            'debug_' => $debugFunc,
             'env' => $env,
             'timezone' => $timezone,
             'user' => $user,
@@ -75,6 +84,14 @@ class ExampleController
 
     public function profile(ServerRequestInterface $request): ResponseInterface
     {
-        return new JsonResponse(['data' => 'user']);
+        $name = $request->getQueryParams()['name'] ?? 'John';
+
+        return $this->view->render('profile', [
+            'name' => $name,
+        ]);
+        // or
+        return \view('profile', [
+            'name' => $name,
+        ]);
     }
 }

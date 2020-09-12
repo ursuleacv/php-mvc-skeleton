@@ -53,7 +53,7 @@ class Config
         $configPath = realpath($this->configPath());
 
         if (!$configPath) {
-            throw new \RuntimeException('Unable to load the "app" configuration file. "app/config" folder not found');
+            throw new \RuntimeException('Unable to load the "app" configuration file. "app/Config" folder not found');
         }
 
         $iterator = new \FilesystemIterator($configPath, \FilesystemIterator::KEY_AS_PATHNAME);
@@ -69,6 +69,6 @@ class Config
 
     private function configPath()
     {
-        return $this->rootPath . DIRECTORY_SEPARATOR.'app' . DIRECTORY_SEPARATOR . 'config';
+        return $this->rootPath . DIRECTORY_SEPARATOR.'app' . DIRECTORY_SEPARATOR . 'Config';
     }
 }
