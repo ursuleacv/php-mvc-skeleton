@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 
 class HomeController
 {
+
     /**
      * @var FindUserAction
      */
@@ -41,13 +42,18 @@ class HomeController
 
         $this->logger->info('test message', ['user' => $user]);
 
+        \logger()->info('This is logged from a global function');
+
         $debug = Application::$app->getContainer()->get('config')->get('app.debug');
         $env = Application::$app->getContainer()->get('config')->get('app.env');
         $timezone = Application::$app->getContainer()->get('config')->get('app.timezone');
 
+        $debugFunc = config('app.debug');
+
 //        return new HtmlResponse('<p>Hello</p>');
         return new JsonResponse([
             'debug' => $debug,
+            'debug_' => $debugFunc,
             'env' => $env,
             'timezone' => $timezone,
             'user' => $user,
