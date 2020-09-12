@@ -2,13 +2,14 @@
 declare(strict_types=1);
 
 use App\Controllers\Api\UserController;
-use App\Controllers\HomeController;
+use App\Controllers\ExampleController;
 use League\Route\RouteGroup;
 
 $router = new League\Route\Router;
 
-$router->get('/', [HomeController::class, 'index']);
-$router->get('/profile', [HomeController::class, 'profile']);
+$router->get('/', [ExampleController::class, 'index']);
+$router->get('/profile', [ExampleController::class, 'profile']);
+$router->get('/session', [ExampleController::class, 'session']);
 
 $router->group('api', function (RouteGroup $route) {
     $route->get('/users', [UserController::class, 'index']);
