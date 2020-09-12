@@ -10,11 +10,11 @@ use PhpMvcCore\Config;
 class ConfigServiceProvider extends AbstractServiceProvider implements BootableServiceProviderInterface
 {
     protected $provides = [
-        'config',
+        'Config',
     ];
 
     protected $aliases = [
-        Config::class => 'config',
+        Config::class => 'Config',
     ];
 
     public function boot()
@@ -31,6 +31,6 @@ class ConfigServiceProvider extends AbstractServiceProvider implements BootableS
         $config = new Config($basePath);
         $conf = $config->loadConfig();
 
-        $container->share('config', $conf);
+        $container->share('Config', $conf);
     }
 }

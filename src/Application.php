@@ -71,6 +71,7 @@ final class Application
             new \PhpMvcCore\ServiceProviders\HttpServiceProvider,
             new \PhpMvcCore\ServiceProviders\SessionServiceProvider,
             new \PhpMvcCore\ServiceProviders\RouterServiceProvider,
+            new \PhpMvcCore\ServiceProviders\TemplateServiceProvider,
             new \PhpMvcCore\ServiceProviders\WhoopsServiceProvider,
         ];
         foreach ($providers as $provider) {
