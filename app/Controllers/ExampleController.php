@@ -10,8 +10,9 @@ use PhpMvcCore\Application;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
 
-class HomeController
+class ExampleController
 {
 
     /**
@@ -57,6 +58,18 @@ class HomeController
             'env' => $env,
             'timezone' => $timezone,
             'user' => $user,
+        ]);
+    }
+
+    public function session(ServerRequestInterface $request): ResponseInterface
+    {
+        /**
+         * @var \PSR7Sessions\Storageless\Session\SessionInterface $session
+         */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+        $session->set('counter', $session->get('counter', 0) + 1);
+        return new JsonResponse([
+            'counter' => $session->get('counter')
         ]);
     }
 

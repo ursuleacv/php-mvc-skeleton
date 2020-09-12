@@ -18,6 +18,7 @@ $dotEnv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotEnv->load();
 $dotEnv->required(['APP_DEBUG'])->isBoolean();
 $dotEnv->required(['APP_ENV'])->notEmpty();
+$dotEnv->required(['APP_KEY'])->notEmpty();
 
 try {
     $app = new \PhpMvcCore\Application();

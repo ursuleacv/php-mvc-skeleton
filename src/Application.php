@@ -10,6 +10,7 @@ use League\Container\ReflectionContainer;
 use League\Route\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
 
 final class Application
 {
@@ -55,6 +56,7 @@ final class Application
         /** @var EmitterInterface $emitter */
         $emitter = $this->container->get(EmitterInterface::class);
 
+        $router->middleware($this->container->get(SessionMiddleware::class));
         $response = $router->dispatch($request);
 
         $emitter->emit($response);
@@ -65,8 +67,9 @@ final class Application
         // TODO: load Whoops only in debug mode
         $providers = [
             new \PhpMvcCore\ServiceProviders\ConfigServiceProvider,
-            new \PhpMvcCore\ServiceProviders\LoggerServiceProvider(),
+            new \PhpMvcCore\ServiceProviders\LoggerServiceProvider,
             new \PhpMvcCore\ServiceProviders\HttpServiceProvider,
+            new \PhpMvcCore\ServiceProviders\SessionServiceProvider,
             new \PhpMvcCore\ServiceProviders\RouterServiceProvider,
             new \PhpMvcCore\ServiceProviders\WhoopsServiceProvider,
         ];
