@@ -15,7 +15,7 @@ class Config
         $this->rootPath = $rootPath;
     }
 
-    public function loadConfig(): Repository
+    public function loadConfig(): ConfigRepository
     {
         $config = $this->loadConfigurationFiles();
 
@@ -27,9 +27,9 @@ class Config
     }
 
     /**
-     * @return Repository
+     * @return ConfigRepository
      */
-    protected function loadConfigurationFiles(): Repository
+    protected function loadConfigurationFiles(): ConfigRepository
     {
         $files = $this->getConfigurationFiles();
 
@@ -37,7 +37,7 @@ class Config
             throw new \RuntimeException('Unable to load the "app" configuration file.');
         }
 
-        $configRepo = new Repository();
+        $configRepo = new ConfigRepository();
 
         foreach ($files as $key => $path) {
             $configRepo->set($key, require $path);

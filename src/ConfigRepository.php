@@ -5,7 +5,7 @@ namespace PhpMvcCore;
 
 use ArrayAccess;
 
-class Repository implements ArrayAccess
+class ConfigRepository implements ArrayAccess
 {
     /**
      * All of the configuration items.
