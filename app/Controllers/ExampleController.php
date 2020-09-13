@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Actions\FindUserAction;
+use Envms\FluentPDO\Exception;
+use Envms\FluentPDO\Query;
 use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
 use PhpMvcCore\View;
@@ -29,14 +31,18 @@ class ExampleController
      */
     private View $view;
 
+    private Query $db;
+
     public function __construct(
         View $view,
         LoggerInterface $logger,
-        FindUserAction $findUser
+        FindUserAction $findUser,
+        Query $query
     ) {
         $this->findUser = $findUser;
         $this->logger = $logger;
         $this->view = $view;
+        $this->db = $query;
     }
 
     /**
@@ -92,6 +98,48 @@ class ExampleController
         // or
         return \view('profile', [
             'name' => $name,
+        ]);
+    }
+
+    public function database(ServerRequestInterface $request): ResponseInterface
+    {
+        $dbPath = explode(':', config('app.database.dsn'));
+        $db = new \SQLite3($dbPath[1]);
+
+        $query = '
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email varchar(50) NOT NULL UNIQUE,
+                password varchar(50) NOT NULL,
+                first_name TEXT NULL,
+	            last_name TEXT NULL
+            )';
+        $db->exec($query) or die("Error Creating Table user_tokens");
+
+        try {
+            $password = \bin2hex(\random_bytes(10));
+
+            $values = [
+                'email' => \bin2hex(\random_bytes(5)) . '@example.com',
+                'password' => \password_hash($password, PASSWORD_BCRYPT),
+            ];
+
+            $this->db->insertInto('users')->values($values)->execute();
+
+            $users = $this->db->from('users')->orderBy('id DESC')->limit(10)->fetchAll();
+
+        } catch (\Exception $e) {
+            dd($e);
+        }
+
+//        foreach ($users as $user) {
+//            echo "$user[id] $user[email] $user[password]\n";
+//        }
+//        dd($users);
+
+        return new JsonResponse([
+            'success' => true,
+            'users' => $users,
         ]);
     }
 }
