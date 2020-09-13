@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace PhpMvcCore\ServiceProviders;
 
-use League\Container\ServiceProvider\BootableServiceProviderInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use PhpMvcCore\Config;
 
-class ConfigServiceProvider extends AbstractServiceProvider implements BootableServiceProviderInterface
+class ConfigServiceProvider extends AbstractServiceProvider
 {
     protected $provides = [
         'Config',
