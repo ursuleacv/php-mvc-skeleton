@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5f12e62ebbc608445a243eed40e8cbe",
+    "content-hash": "9b2a69c7a28aa716d5759129dfea10da",
     "packages": [
         {
             "name": "dflydev/fig-cookies",
@@ -1201,6 +1201,52 @@
             ],
             "description": "Storageless PSR-7 Session support",
             "time": "2020-08-01T22:04:50+00:00"
+        },
+        {
+            "name": "siriusphp/validation",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/siriusphp/validation.git",
+                "reference": "6e16e6b4636abe580aee9d6529a721ee830c9e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/siriusphp/validation/zipball/6e16e6b4636abe580aee9d6529a721ee830c9e61",
+                "reference": "6e16e6b4636abe580aee9d6529a721ee830c9e61",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sirius\\Validation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Miu",
+                    "email": "adrian@adrianmiu.ro"
+                }
+            ],
+            "description": "Data validation library. Validate arrays, array objects, domain models etc using a simple API. Easily add your own validators on top of the already dozens built-in validation rules",
+            "keywords": [
+                "form",
+                "modeling",
+                "sanitization",
+                "security",
+                "validation"
+            ],
+            "time": "2020-06-08T06:23:44+00:00"
         }
     ],
     "packages-dev": [
@@ -3670,7 +3716,10 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4.0"
+        "php": ">=7.4.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-sqlite3": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"

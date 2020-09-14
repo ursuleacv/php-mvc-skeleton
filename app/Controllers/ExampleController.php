@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Actions\FindUserAction;
-use Envms\FluentPDO\Exception;
 use Envms\FluentPDO\Query;
 use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
@@ -13,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use PSR7Sessions\Storageless\Http\SessionMiddleware;
+use Sirius\Validation\Validator;
 
 class ExampleController
 {
@@ -32,17 +32,23 @@ class ExampleController
     private View $view;
 
     private Query $db;
+    /**
+     * @var Validator
+     */
+    private Validator $validator;
 
     public function __construct(
         View $view,
         LoggerInterface $logger,
         FindUserAction $findUser,
-        Query $query
+        Query $query,
+        Validator $validator
     ) {
         $this->findUser = $findUser;
         $this->logger = $logger;
         $this->view = $view;
         $this->db = $query;
+        $this->validator = $validator;
     }
 
     /**
@@ -112,7 +118,8 @@ class ExampleController
                 email varchar(50) NOT NULL UNIQUE,
                 password varchar(50) NOT NULL,
                 first_name TEXT NULL,
-	            last_name TEXT NULL
+	            last_name TEXT NULL,
+	            created_at INTEGER NULL
             )';
         $db->exec($query) or die("Error Creating Table user_tokens");
 
@@ -122,12 +129,14 @@ class ExampleController
             $values = [
                 'email' => \bin2hex(\random_bytes(5)) . '@example.com',
                 'password' => \password_hash($password, PASSWORD_BCRYPT),
+                'created_at' => time(),
             ];
 
             $this->db->insertInto('users')->values($values)->execute();
 
             $users = $this->db->from('users')->orderBy('id DESC')->limit(10)->fetchAll();
 
+            $user = $this->db->from('users')->where('id', 1)->fetch();
         } catch (\Exception $e) {
             dd($e);
         }
@@ -139,7 +148,49 @@ class ExampleController
 
         return new JsonResponse([
             'success' => true,
+            'user' => $user,
             'users' => $users,
         ]);
+    }
+
+    public function create(): ResponseInterface
+    {
+        return $this->view->render('create', [
+            'result' => false,
+            'errors' => [],
+            'data' => [],
+        ]);
+    }
+
+    public function store(ServerRequestInterface $request): ResponseInterface
+    {
+        $errors = [];
+        $result = false;
+        $data = $request->getParsedBody();
+        $this->validator->add([
+            'first_name:First Name' => 'required | alpha | minlength(3) | maxlength(50)',
+            'last_name:Last Name' => 'required | alpha | minlength(3) | maxlength(50)',
+            'email:Email' => 'required | email | unique(users,email)',
+            // 'email:Email' => 'required | email | exists(users,email)',
+            'password:Password' => 'required | minlength(8) | maxlength(24)'
+        ]);
+        if ($this->validator->validate($data)) {
+            try {
+                $result = $this->db->insertInto('users')->values([
+                    'first_name' => $data['first_name'] ?? null,
+                    'last_name'  => $data['last_name'] ?? null,
+                    'email'      => $data['email'],
+                    'password'   => password_hash($data['password'], PASSWORD_DEFAULT)
+                ])->execute();
+                $data = [];
+            } catch (\Exception $e) {
+                $this->validator->addMessage('email', $e->getMessage());
+                $errors = $this->validator->getMessages();
+            }
+        } else {
+            $errors = $this->validator->getMessages();
+        }
+
+        return $this->view->render('create', compact('result', 'errors', 'data'));
     }
 }
