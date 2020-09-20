@@ -109,19 +109,21 @@ class ExampleController
 
     public function database(ServerRequestInterface $request): ResponseInterface
     {
-        $dbPath = explode(':', config('app.database.dsn'));
-        $db = new \SQLite3($dbPath[1]);
-
-        $query = '
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email varchar(50) NOT NULL UNIQUE,
-                password varchar(50) NOT NULL,
-                first_name TEXT NULL,
-	            last_name TEXT NULL,
-	            created_at INTEGER NULL
-            )';
-        $db->exec($query) or die("Error Creating Table user_tokens");
+//        $query = '
+//            CREATE TABLE IF NOT EXISTS users (
+//                id int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+//                email varchar(50) NOT NULL UNIQUE,
+//                password varchar(255) NOT NULL,
+//                first_name varchar(50) NULL,
+//	            last_name varchar(50) NULL,
+//	            created_at int(11) UNSIGNED NULL
+//            )';
+//
+//        try {
+//            $this->db->getPdo()->exec($query);
+//        } catch (\PDOException $e) {
+//            dd($e);
+//        }
 
         try {
             $password = \bin2hex(\random_bytes(10));
@@ -129,7 +131,7 @@ class ExampleController
             $values = [
                 'email' => \bin2hex(\random_bytes(5)) . '@example.com',
                 'password' => \password_hash($password, PASSWORD_BCRYPT),
-                'created_at' => time(),
+                'created_at' => (new \DateTime())->format('Y-m-d H:i:s'),
             ];
 
             $this->db->insertInto('users')->values($values)->execute();
