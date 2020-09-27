@@ -229,7 +229,7 @@ Additional configuration in the `src/Providers/TemplateServiceProvider.php` file
 ### Debug
 The error Handler of the project captures all the errors-exceptions that are not contemplated in a tryCatch block, indicates in a friendly way the error stack and even highlights the code with the error, obviously it is only recommended in the development environment, 
 to enable it you have to set the environment variable: 
-```sh
+```text
 APP_DEBUG = true. 
 ```
 
