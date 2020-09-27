@@ -163,11 +163,11 @@ If for some reason you need to replace the conventional `ext/session` sessions, 
 Additional configuration in the `src/Providers/SessionServiceProvider.php` file.
 
 ### Database
-The project uses the FluentPDO, a PHP SQL query builder using PDO.
+The project uses the FluentPDO library, a PHP SQL query builder using PDO.
 ```php
 $this->db->from('users')->where('id', 1)->fetch();
 ```
-Additional configuration in the `asrc/ServiceProviders/DatabaseServiceProvider.php` file.
+Additional configuration in the `src/ServiceProviders/DatabaseServiceProvider.php` file.
 
 #### Database Migrations & Seeding
 You can keep track of changes on the design of the database with migrations, you only need to configure the connection in the **phinx.php** file, to create the migration you have to execute the following command:
