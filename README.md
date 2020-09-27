@@ -26,6 +26,10 @@ TODO:
 ```
 
 ### Installation
+```shell script
+git clone https://github.com/ursuleacv/php-mvc-skeleton.git
+```
+
 Project dependencies are managed by [Composer](https://getcomposer.org/) which can be easily installed with a couple of commands:
 ```shell script
 curl -sS https://getcomposer.org/installer | php
