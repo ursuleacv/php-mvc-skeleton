@@ -1,6 +1,6 @@
 {
-    "name": "ursuleacv/php-mvc-core",
-    "description": "Simple PHP framework",
+    "name": "ursuleacv/php-mvc-skeleton",
+    "description": "Simple PHP MVC framework",
     "type": "project",
     "require": {
         "php": ">=7.4.0",
