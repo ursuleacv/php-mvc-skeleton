@@ -91,7 +91,7 @@ $container
 ```
 
 ### Service Provider
-The **ReflectionContainer** is not capable of resolving a dependency if it has scalar arguments or depends on an interface | contract, for these cases it is necessary to teach the Container how to resolve the dependency, a service provider takes care of this. Service providers inherit from `AbstractServiceProvider` and are stored in the` app/Provider` folder, it is also necessary to register them in the `App \ Application` class with the` getProviders () `method.
+The **ReflectionContainer** is not capable of resolving a dependency if it has scalar arguments or depends on an interface | contract, for these cases it is necessary to teach the Container how to resolve the dependency, a service provider takes care of this. Service providers inherit from `AbstractServiceProvider` and are stored in the` app/Provider` folder, it is also necessary to register them in the `PhpMvcCore\Application` class with the` getProviders () `method.
 ```php
 protected $provides = ['Some\ClassInterface'];
 public function register()
@@ -133,7 +133,7 @@ $response->getBody()->write(json_encode([
 ]));
 ```
 ### PSR-15 Middleware Dispatcher
-The project has two PSR-15 Middleware Dispatchers, the Router and the Kernel, the middleware is stored in the `app/Http/Middleware` folder and must implement the` Psr \ Http \ Server \ MiddlewareInterface` interface. If they are going to be used in the Router to manipulate the Request (before) or the Response (after) when dispatching a route, it is only necessary to register them in the `app/Http/routes.php` file:
+The project has two PSR-15 Middleware Dispatchers, the Router and the Kernel, the middleware is stored in the `app/Http/Middleware` folder and must implement the` Psr\Http\Server\MiddlewareInterface` interface. If they are going to be used in the Router to manipulate the Request (before) or the Response (after) when dispatching a route, it is only necessary to register them in the `app/Http/routes.php` file:
 ```php
 //General
 $router->middleware(new Acme\AuthMiddleware);
