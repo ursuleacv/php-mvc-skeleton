@@ -70,10 +70,10 @@ $router->get ('/example', function (ServerRequestInterface $request): ResponseIn
 
 $router->get ('/users/{id: number}', [App\Controllers\UsersController::class, 'show']);
 ```
-The __handler__ needs to return a [Response] object (# psr-7-http-response).
+The __handler__ needs to return a [Response] object (#psr-7-http-response).
 
 ### Controllers
-Controllers are created in the `app/Controllers` folder, it is recommended to inherit from the` App \ Http \ Controllers \ Controller` class for extra functionality. Build dependencies are resolved automatically by the [Container] (# psr-11-container) installed in the project:
+Controllers are created in the `app/Controllers` folder. Build dependencies are resolved automatically by the [Container] (#psr-11-container) installed in the project:
 ```php
 public function __construct (View $view, User $user)
 {
