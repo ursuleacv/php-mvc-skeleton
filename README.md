@@ -49,7 +49,7 @@ php -S localhost:8000 -t public
 ```
 
 ### PSR-4 Autoloading
-Project classes are loaded automatically thanks to Composer, as long as the PSR-4 standard of [PHP-FIG] (https://www.php-fig.org/psr/psr-4/) is followed.
+Project classes are loaded automatically thanks to Composer, as long as the PSR-4 standard of [PHP-FIG](https://www.php-fig.org/psr/psr-4/) is followed.
 ```php
 namespace App\SomeDirectory\ClassName;
 ```
@@ -70,10 +70,10 @@ $router->get ('/example', function (ServerRequestInterface $request): ResponseIn
 
 $router->get ('/users/{id: number}', [App\Controllers\UsersController::class, 'show']);
 ```
-The __handler__ needs to return a [Response] object (#psr-7-http-response).
+The __handler__ needs to return a [Response](#psr-7-http-response) object.
 
 ### Controllers
-Controllers are created in the `app/Controllers` folder. Build dependencies are resolved automatically by the [Container] (#psr-11-container) installed in the project:
+Controllers are created in the `app/Controllers` folder. Build dependencies are resolved automatically by the [Container](#psr-11-container) installed in the project:
 ```php
 public function __construct (View $view, User $user)
 {
@@ -120,7 +120,7 @@ This object is necessary to send some kind of response to the client (browser), 
 
 * Creating an instance of `Laminas\Diactoros\Response` or derivatives.
 * Request it in the constructor through the interface `Psr\Http\Message\ServerRequestInterface`.
-* Through the [Template Engine] (#template-engine).
+* Through the [Template Engine](#template-engine).
 * Through the global function (helpers.php) response().
 
 With the Response object it is only necessary to set the corresponding headers, and the content, the project is in charge of preparing and sending the response to the client.
@@ -143,7 +143,7 @@ $router->get('/', [Controller::class, 'create'])->middleware(new Acme\AuthMiddle
 If the middleware needs to be applied independently to the Router's handler, that is, it affects another layer of the application, it must be registered in the `App\Application` class with the` vendorMiddleware() `method.
 
 ### PSR-7 Sessions StorageLess
-The handling of sessions is managed in a different way, in PHP the extension `ext/session` is generally used with the super-global` $_SESSION`, internally a file is created on the server, and an identifier that is stored in a cookie. A `StorageLess` session does not create this file, the information is stored in a cookie through a JWT token, this type of session has several [advantages] (https://github.com/psr7-sessions/storageless#advantages) over the conventional sessions. To create the JWT token a randomly generated key is used, this key is obtained with the environment variable `APP_KEY`.
+The handling of sessions is managed in a different way, in PHP the extension `ext/session` is generally used with the super-global` $_SESSION`, internally a file is created on the server, and an identifier that is stored in a cookie. A `StorageLess` session does not create this file, the information is stored in a cookie through a JWT token, this type of session has several [advantages](https://github.com/psr7-sessions/storageless#advantages) over the conventional sessions. To create the JWT token a randomly generated key is used, this key is obtained with the environment variable `APP_KEY`.
 To generate the `APP_KEY` you can use:
 ```shell script
 openssl rand -hex 32
@@ -190,7 +190,7 @@ vendor/bin/phinx seed:run -v
 
 ### Validation
 The Validator object can be obtained by construction or by creating an instance in any method, all the documentation can be found on the author's website [SiriusValidation](http://www.sirius.ro/php/sirius/validation/).
-[Custom] validation rules(https://www.sirius.ro/php/sirius/validation/rule_factory.html) can be created to extend the functionality, these rules must be stored individually in the `app/ValidationRules` and must be registered in the Service Provider `src/ServiceProviders/ValidationServiceProvider.php`.
+[Custom](https://www.sirius.ro/php/sirius/validation/rule_factory.html) validation rules can be created to extend the functionality, these rules must be stored individually in the `app/ValidationRules` and must be registered in the Service Provider `src/ServiceProviders/ValidationServiceProvider.php`.
 ```php
  $validator->add([
     'email: Email' => 'required|email|unique(users, email)',
@@ -234,7 +234,7 @@ APP_DEBUG = true.
 ```
 
 ### PSR-12 Validate
-The project code can be validated and corrected with the PSR-12 standard of [PHP-FIG] (https://www.php-fig.org/psr/psr-12/)
+The project code can be validated and corrected with the PSR-12 standard of [PHP-FIG](https://www.php-fig.org/psr/psr-12/)
 ```shell script
 vendor/bin/phpcs -n -p --colors --report=summary --standard=psr12 app/ --ignore=app/db*
 ```
