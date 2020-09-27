@@ -1,5 +1,8 @@
 <?php
+
 declare(strict_types=1);
+
+namespace App\DB\Migrations;
 
 use Phinx\Migration\AbstractMigration;
 

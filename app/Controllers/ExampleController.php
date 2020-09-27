@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -115,8 +116,8 @@ class ExampleController
 //                email varchar(50) NOT NULL UNIQUE,
 //                password varchar(255) NOT NULL,
 //                first_name varchar(50) NULL,
-//	            last_name varchar(50) NULL,
-//	            created_at int(11) UNSIGNED NULL
+//              last_name varchar(50) NULL,
+//              created_at int(11) UNSIGNED NULL
 //            )';
 //
 //        try {
