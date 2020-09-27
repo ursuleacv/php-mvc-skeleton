@@ -1,4 +1,6 @@
-<?php $v->layout('layout', ['title' => 'User Profile']) ?>
+<?php
+
+$v->layout('layout', ['title' => 'User Profile']) ?>
 
 <div class="container">
     <h3>User Profile</h3>

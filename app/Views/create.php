@@ -21,11 +21,11 @@
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="text" name="last_name" placeholder="Last Name"
-                           value="<?=$data['last_name']??'';?>">
+                           value="<?=$data['last_name'] ?? '';?>">
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="email" name="email" placeholder="Email"
-                           value="<?=$data['email']??'';?>">
+                           value="<?=$data['email'] ?? '';?>">
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="password" name="password" placeholder="Password">

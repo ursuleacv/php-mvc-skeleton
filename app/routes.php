@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Controllers\Api\UserController;
 use App\Controllers\ExampleController;
 use League\Route\RouteGroup;
 
-$router = new League\Route\Router;
+$router = new League\Route\Router();
 
 $router->get('/', [ExampleController::class, 'index']);
 $router->get('/profile', [ExampleController::class, 'profile']);

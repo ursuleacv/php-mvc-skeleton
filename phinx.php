@@ -7,8 +7,14 @@ Dotenv\Dotenv::createImmutable(__DIR__)->load();
 return
     [
         'paths' => [
-            'migrations' => './app/db/migrations',
-            'seeds' => './app/db/seeds'
+//            'migrations' => './app/db/migrations',
+//            'seeds' => './app/db/seeds'
+            'migrations' => [
+                'App\\DB\\Migrations' => './app/db/migrations',
+            ],
+            'seeds' => [
+                'App\\DB\\Seeds' => './app/db/seeds',
+            ]
         ],
         'environments' => [
             'default_migration_table' => 'phinxlog',
