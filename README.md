@@ -83,7 +83,7 @@ public function __construct (View $view, User $user)
 ```
 
 ### PSR-11 Container
-The project has an IoC container that resolves the dependencies of a class automatically ** ReflectionContainer **, it can be configured in the `app/Core/container.php` file:
+The project has an IoC container that resolves the dependencies of a class automatically **ReflectionContainer**:
 ```php
 $container
    ->add(Acme\Foo::class)
@@ -91,7 +91,7 @@ $container
 ```
 
 ### Service Provider
-The ** ReflectionContainer ** is not capable of resolving a dependency if it has scalar arguments or depends on an interface | contract, for these cases it is necessary to teach the Container how to resolve the dependency, a service provider takes care of this. Service providers inherit from `AbstractServiceProvider` and are stored in the` app/Provider` folder, it is also necessary to register them in the `App \ Application` class with the` getProviders () `method.
+The **ReflectionContainer** is not capable of resolving a dependency if it has scalar arguments or depends on an interface | contract, for these cases it is necessary to teach the Container how to resolve the dependency, a service provider takes care of this. Service providers inherit from `AbstractServiceProvider` and are stored in the` app/Provider` folder, it is also necessary to register them in the `App \ Application` class with the` getProviders () `method.
 ```php
 protected $provides = ['Some\ClassInterface'];
 public function register()
@@ -170,7 +170,7 @@ $this->db->from('users')->where('id', 1)->fetch();
 Additional configuration in the `asrc/ServiceProviders/DatabaseServiceProvider.php` file.
 
 #### Database Migrations & Seeding
-You can keep track of changes on the design of the database with migrations, you only need to configure the connection in the ** phinx.php ** file, to create the migration you have to execute the following command:
+You can keep track of changes on the design of the database with migrations, you only need to configure the connection in the **phinx.php** file, to create the migration you have to execute the following command:
 ```shell script
 vendor/bin/phinx create CreateUsersTable
 ```
