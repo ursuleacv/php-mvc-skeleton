@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Actions\FindUserAction;
+use Auth0\SDK\Auth0;
+use Auth0\SDK\Exception\ApiException;
+use Auth0\SDK\Exception\CoreException;
+use Auth0\SDK\Store\EmptyStore;
+use Auth0\SDK\Store\SessionStore;
+use Auth0\SDK\Store\StoreInterface;
 use Envms\FluentPDO\Query;
 use Laminas\Diactoros\Response\JsonResponse;
 use PhpMvcCore\Application;
 use PhpMvcCore\View;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use PSR7Sessions\Storageless\Http\SessionMiddleware;
+use PSR7Sessions\Storageless\Session\LazySession;
+use PSR7Sessions\Storageless\Session\SessionInterface;
 use Sirius\Validation\Validator;
 
 class ExampleController
@@ -195,5 +204,109 @@ class ExampleController
         }
 
         return $this->view->render('create', compact('result', 'errors', 'data'));
+    }
+
+    public function login(RequestInterface $request): ResponseInterface
+    {
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+
+        $auth0 = new Auth0([
+            'domain' => env('AUTH0_DOMAIN'),
+            'client_id' => env('AUTH0_CLIENT_ID'),
+            'client_secret' => env('AUTH0_CLIENT_SECRET'),
+            'redirect_uri' => 'http://localhost:8000/auth/callback',
+            'scope' => 'openid email profile',
+            'store' => new EmptyStore(),
+        ]);
+
+//        When using native session
+//        try {
+//            $userInfo = $auth0->getUser();
+//        } catch (\Exception $e) {
+//            dd($e);
+//        }
+//
+//        if (empty($userInfo)) {
+//            $auth0->login();
+//        }
+//
+//        dd($userInfo);
+
+        $user = $session->get('user');
+
+        if (empty($user)) {
+            $auth0->login();
+        }
+
+        dd($user);
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     * @throws CoreException
+     */
+    public function callback(RequestInterface $request): ResponseInterface
+    {
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+
+        $auth0 = new Auth0([
+            'domain' => env('AUTH0_DOMAIN'),
+            'client_id' => env('AUTH0_CLIENT_ID'),
+            'client_secret' => env('AUTH0_CLIENT_SECRET'),
+            'redirect_uri' => '/auth/callback',
+            'scope' => 'openid email profile',
+            'store' => new EmptyStore(),// Doesn't work well with storage-less session
+        ]);
+
+        try {
+            $userInfo = $auth0->getUser();
+            if ($userInfo) {
+                $session->set('user', [
+                    'id' => $userInfo['sub'],
+                    'email' => $userInfo['email'],
+                ]);
+            }
+        } catch (\Exception $e) {
+//            dd($e);
+        }
+
+        $user = $session->get('user');
+
+        if (empty($user)) {
+            $auth0->login();
+        }
+
+        return new JsonResponse([
+            'user' => $user,
+        ]);
+    }
+
+    private function getStorage(ServerRequestInterface $request)
+    {
+        return new class($request) implements StoreInterface {
+            private $session;
+            public function __construct(ServerRequestInterface $request)
+            {
+                /** @var SessionInterface $session */
+                $this->session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+            }
+
+            public function set(string $key, $value)
+            {
+                $this->session->set($key, $value);
+            }
+            public function get(string $key, $default = null)
+            {
+                return $this->session->get($key, $default);
+            }
+            public function delete(string $key)
+            {
+                $this->session->remove($key);
+            }
+
+        };
     }
 }

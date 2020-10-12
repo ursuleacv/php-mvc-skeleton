@@ -46,7 +46,7 @@ class SessionServiceProvider extends AbstractServiceProvider
                     ->withPath('/'),
                 new Parser(),
                 1200,
-                new SystemClock()
+                new SystemClock(new \DateTimeZone('UTC'))
             );
         });
     }

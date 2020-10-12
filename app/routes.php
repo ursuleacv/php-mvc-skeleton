@@ -14,6 +14,8 @@ $router->get('/session', [ExampleController::class, 'session']);
 $router->get('/database', [ExampleController::class, 'database']);
 $router->get('/create', [ExampleController::class, 'create']);
 $router->post('/create', [ExampleController::class, 'store']);
+$router->get('/auth/login', [ExampleController::class, 'login']);
+$router->get('/auth/callback', [ExampleController::class, 'callback']);
 
 $router->group('api', function (RouteGroup $route) {
     $route->get('/users', [UserController::class, 'index']);
